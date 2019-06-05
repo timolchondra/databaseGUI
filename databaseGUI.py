@@ -65,14 +65,39 @@ def ethnicWindow():
 
 def allVillagesWindow():
     villageWindow = Toplevel(root)
-    menu = Menu(root)
-    villageWindow.config(menu=menu)
-
-    subMenu = Menu(menu)
-    menu.add_cascade(label="file",menu=subMenu)
     display = Label(villageWindow, text="Villages of Guam")
     display.pack()
+    buttons = []
+    villageList = []
 
+    villageFrame = Frame(villageWindow)
+    villageFrame.pack(expand=True, fill=BOTH)
+
+    mycursor.execute("SELECT VillageName FROM Village ORDER BY VillageName ASC")
+    myresult = mycursor.fetchall()
+    for names in myresult:
+        for y in names:
+                villageList.append(y)
+
+    def createVillageWindow(event):
+        w = event.widget
+        nameOfVillage = w['text']
+        village = VillageWindow(villageWindow, nameOfVillage)
+
+    for x in villageList:
+        name = x
+        villageButton = Button(villageFrame, text=name)
+        villageButton.pack()
+        villageButton.bind('<Button-1>',createVillageWindow)
+        buttons.append(villageButton)
+
+
+
+class VillageWindow:
+    def __init__(self,master,villageName):
+       villageWindow = Toplevel(master)
+       self.titleLabel = Label(villageWindow, text=villageName + " Village", height=3)
+       self.titleLabel.pack()
 
 class MainWindow:
     def __init__(self, master):
