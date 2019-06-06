@@ -138,10 +138,10 @@ class VillageWindow:
        beachButton.grid(row=1, column=8)
 
        groceryButton = Radiobutton(villageWindow, indicatoron =0, text="Grocery Stores", variable=var, value="Grocery", command = lambda: self.displayData(villageWindow, "Grocery"))
-       groceryButton.grid(row=1, column=8)
+       groceryButton.grid(row=1, column=9)
 
        churchButton = Radiobutton(villageWindow, indicatoron =0, text="Churches", variable=var, value="Church", command=lambda: self.displayData(villageWindow, "Church"))
-       churchButton.grid(row=1, column=9)
+       churchButton.grid(row=1, column=10)
 
     def displayData(self, master, buttonPressed):
         #destroy the labels when another button is pressed
@@ -275,7 +275,273 @@ class VillageWindow:
             highButton.grid(row=2,column=2)
             self.buttons.append(highButton)
 
-        #if buttonPressed == "College":
+        if buttonPressed == "College":
+            mycursor.execute("SELECT CollegeName, WebsiteURL, PhoneNumber, Mascot FROM College WHERE VillageName = '%s'"%self.villageName)
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="College Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Website URL")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            label3 = LabelFrame(master, text="Phone Number")
+            label3.grid(row=2, column=2)
+            self.labels.append(label3)
+
+            label4 = LabelFrame(master, text="Mascot")
+            label4.grid(row=2, column=3)
+            self.labels.append(label4)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+                    if column == 2:
+                        data = Label(label3, text=str(y))
+                    if column == 3:
+                        data = Label(label4, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
+
+        if buttonPressed == "Restaurant":
+            mycursor.execute("SELECT RestaurantName, Address, TypeOfFood, PhoneNumber, CONCAT(StartHour,'-',EndHour) as Hours FROM Restaurant join RestaurantHours using(RestaurantName) WHERE VillageName = '%s' GROUP BY RestaurantName"%self.villageName)
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="Restaurant Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Address")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            label3 = LabelFrame(master, text="Type Of Food")
+            label3.grid(row=2, column=2)
+            self.labels.append(label3)
+
+            label4 = LabelFrame(master, text="Phone Number")
+            label4.grid(row=2, column=3)
+            self.labels.append(label4)
+
+            label5 = LabelFrame(master, text="Hours")
+            label5.grid(row=2, column=4)
+            self.labels.append(label5)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+                    if column == 2:
+                        data = Label(label3, text=str(y))
+                    if column == 3:
+                        data = Label(label4, text=str(y))
+                    if column == 4:
+                        data = Label(label5, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
+
+        if buttonPressed == "Mall":
+            mycursor.execute("SELECT MallName, Address, NumOfStores, PhoneNUmber, CONCAT(StartHour,'-',EndHour) as Hours FROM Mall join MallHours using(MallName) WHERE VillageName = '%s' GROUP BY MallName"%self.villageName)
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="Mall Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Address")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            label3 = LabelFrame(master, text="Number of Stores")
+            label3.grid(row=2, column=2)
+            self.labels.append(label3)
+
+            label4 = LabelFrame(master, text="Phone Number")
+            label4.grid(row=2, column=3)
+            self.labels.append(label4)
+
+            label5 = LabelFrame(master, text="Hours")
+            label5.grid(row=2, column=4)
+            self.labels.append(label5)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+                    if column == 2:
+                        data = Label(label3, text=str(y))
+                    if column == 3:
+                        data = Label(label4, text=str(y))
+                    if column == 4:
+                        data = Label(label5, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
+
+        if buttonPressed == "MovieTheater":
+            mycursor.execute("SELECT TheaterName, Address, PhoneNumber, CONCAT(StartHour,'-',EndHour) as Hours FROM MovieTheater join MovieTheaterHours using(TheaterName) WHERE VillageName = '%s' GROUP BY TheaterName"%self.villageName)
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="Theater Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Address")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            label3 = LabelFrame(master, text="Phone Number")
+            label3.grid(row=2, column=2)
+            self.labels.append(label3)
+
+            label4 = LabelFrame(master, text="Hours")
+            label4.grid(row=2, column=3)
+            self.labels.append(label4)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+                    if column == 2:
+                        data = Label(label3, text=str(y))
+                    if column == 3:
+                        data = Label(label4, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
+
+        if buttonPressed == "Beach":
+            mycursor.execute("SELECT BeachName, Address FROM Beach WHERE VillageName = '%s'"%self.villageName) 
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="Beach Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Address")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
+
+
+        if buttonPressed == "Grocery":
+            mycursor.execute("SELECT GroceryName, Address, PhoneNumber, CONCAT(StartHour,'-',EndHour) as Hours FROM Grocery join GroceryHours using(GroceryName) WHERE VillageName = '%s' GROUP BY GroceryName"%self.villageName)
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="Grocery Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Address")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            label3 = LabelFrame(master, text="Phone Number")
+            label3.grid(row=2, column=2)
+            self.labels.append(label3)
+
+            label4 = LabelFrame(master, text="Hours")
+            label4.grid(row=2, column=3)
+            self.labels.append(label4)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+                    if column == 2:
+                        data = Label(label3, text=str(y))
+                    if column == 3:
+                        data = Label(label4, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
+
+        if buttonPressed == "Church":
+            mycursor.execute("SELECT ChurchName, Address, Denomination FROM Church WHERE VillageName = '%s'"%self.villageName) 
+            myresult = mycursor.fetchall()
+
+            label1 = LabelFrame(master, text="Church Name")
+            label1.grid(row=2,column=0)
+            self.labels.append(label1)
+
+            label2 = LabelFrame(master, text="Address")
+            label2.grid(row=2,column=1)
+            self.labels.append(label2)
+
+            label3 = LabelFrame(master, text="Denomination")
+            label3.grid(row=2,column=2)
+            self.labels.append(label3)
+
+            row = 2
+            for x in myresult:
+                column=0
+                row = row + 1
+                for y in x:
+                    if column == 0:
+                        data = Label(label1, text=str(y))
+                    if column == 1:
+                        data = Label(label2, text=str(y))
+                    if column == 2:
+                        data = Label(label3, text=str(y))
+
+                    data.grid(row=row, column=column)
+                    self.labels.append(data)
+                    column = column + 1
+            myresult.clear()
 
     def displaySchools(self, master, publicprivate ,gradeLevel):
         for x in self.labels:
