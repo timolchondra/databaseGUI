@@ -1,10 +1,11 @@
 from tkinter import *
 import mysql.connector
 
+#insert your database information here
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    passwd="fender10",
+    passwd="root",
     database="Database_Project"
 
 )
@@ -13,12 +14,7 @@ mycursor = mydb.cursor()
 populationList = []
 ethnicGroupList = []
 
-def printTest():
-    print(test)
-
-def populationWindow():
-    populationWindow = Toplevel(root)
-
+#ethnic group window, lists out all information from the database
 def ethnicWindow():
     ethnicWindow = Toplevel(root)
     windowTitle = Label(ethnicWindow,text="Ethnic Groups:")
@@ -49,21 +45,13 @@ def ethnicWindow():
     ethnicGroupList.clear()
     buttonRow = rows+1
 
-    #def destroyLabel():
-     #   for x in labels:
-      #      x.destroy()
-
-    #clearButtonFrame = Frame(ethnicWindow)
-    #clearButtonFrame.grid(row=buttonRow,column=2)
-    #clearButton = Button(clearButtonFrame, text="clear", command=destroyLabel)
-    #clearButton.grid(row=buttonRow,column=2)
-
 
     exitButtonFrame = Frame(ethnicWindow)
     exitButtonFrame.grid(row=buttonRow,column=3)
     exitButton = Button(exitButtonFrame, text="exit", command=ethnicWindow.destroy)
     exitButton.grid(row=buttonRow, column=3)
 
+#function that creates the window to list all the villages
 def allVillagesWindow():
     villageWindow = Toplevel(root)
     display = Label(villageWindow, text="Villages of Guam")
@@ -93,7 +81,7 @@ def allVillagesWindow():
         buttons.append(villageButton)
 
 
-
+#class window that displays all information that is contained within the village
 class VillageWindow:
     villageName = ""
     labels = []
@@ -104,8 +92,6 @@ class VillageWindow:
        self.villageName = villageName
        self.titleLabel = Label(villageWindow, text=villageName + " Village", height=3)
        self.titleLabel.grid(row=0,column=0)
-       #bottomFrame = Frame(villageWindow)
-       #bottomFrame.pack(side=BOTTOM)
        bottomFrame = Frame(villageWindow)
        bottomFrame.grid(row=2)
 
@@ -150,7 +136,7 @@ class VillageWindow:
         #destroy all buttons created
         for x in self.buttons:
             x.destroy()
-
+        #prints out houses that are available
         if buttonPressed == "House":
             mycursor.execute("SELECT House_Description, Address, Cost, NumOfBedrooms, NumOfBathrooms, SquareAcres FROM %s WHERE VillageName = '%s' ORDER BY COST"%(buttonPressed, self.villageName))
             myresult = mycursor.fetchall()
@@ -202,7 +188,7 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #prints out informations of Apartments in the village
         if buttonPressed == "Apartment":
             mycursor.execute("SELECT MLSNumber, Address, AptUnit, CostOfRent, NumOfBedrooms, NumOfBathrooms, SizeInSqft FROM Apartment WHERE VillageName = '%s' ORDER BY CostOfRent"%self.villageName)
 
@@ -260,7 +246,8 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #creates buttons that lets user choose either elementary, middle or high school
+        #then displays information about the school through the class function, displayschools()
         if buttonPressed == "PrivateSchool" or buttonPressed == "PublicSchool":
             var = StringVar()
             elementaryButton = Radiobutton(master, indicatoron=0, text="Elementary Schools", variable=var, value="ElementarySchool", command = lambda: self.displaySchools(master, buttonPressed, "ElementarySchool") )
@@ -275,6 +262,7 @@ class VillageWindow:
             highButton.grid(row=2,column=2)
             self.buttons.append(highButton)
 
+        #prints out information of colleges in the village
         if buttonPressed == "College":
             mycursor.execute("SELECT CollegeName, WebsiteURL, PhoneNumber, Mascot FROM College WHERE VillageName = '%s'"%self.villageName)
             myresult = mycursor.fetchall()
@@ -313,7 +301,7 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #displays information of Restaurants in the village
         if buttonPressed == "Restaurant":
             mycursor.execute("SELECT RestaurantName, Address, TypeOfFood, PhoneNumber, CONCAT(StartHour,'-',EndHour) as Hours FROM Restaurant join RestaurantHours using(RestaurantName) WHERE VillageName = '%s' GROUP BY RestaurantName"%self.villageName)
             myresult = mycursor.fetchall()
@@ -358,7 +346,7 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #displays informatoin about Malls in the village
         if buttonPressed == "Mall":
             mycursor.execute("SELECT MallName, Address, NumOfStores, PhoneNUmber, CONCAT(StartHour,'-',EndHour) as Hours FROM Mall join MallHours using(MallName) WHERE VillageName = '%s' GROUP BY MallName"%self.villageName)
             myresult = mycursor.fetchall()
@@ -403,7 +391,7 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #displays all movie theaters in the village
         if buttonPressed == "MovieTheater":
             mycursor.execute("SELECT TheaterName, Address, PhoneNumber, CONCAT(StartHour,'-',EndHour) as Hours FROM MovieTheater join MovieTheaterHours using(TheaterName) WHERE VillageName = '%s' GROUP BY TheaterName"%self.villageName)
             myresult = mycursor.fetchall()
@@ -442,9 +430,9 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #displays the beaches in the village
         if buttonPressed == "Beach":
-            mycursor.execute("SELECT BeachName, Address FROM Beach WHERE VillageName = '%s'"%self.villageName) 
+            mycursor.execute("SELECT BeachName, Address FROM Beach WHERE VillageName = '%s'"%self.villageName)
             myresult = mycursor.fetchall()
 
             label1 = LabelFrame(master, text="Beach Name")
@@ -470,7 +458,7 @@ class VillageWindow:
                     column = column + 1
             myresult.clear()
 
-
+        #displays the grocery stores in the village
         if buttonPressed == "Grocery":
             mycursor.execute("SELECT GroceryName, Address, PhoneNumber, CONCAT(StartHour,'-',EndHour) as Hours FROM Grocery join GroceryHours using(GroceryName) WHERE VillageName = '%s' GROUP BY GroceryName"%self.villageName)
             myresult = mycursor.fetchall()
@@ -509,9 +497,9 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #shows user churches in village
         if buttonPressed == "Church":
-            mycursor.execute("SELECT ChurchName, Address, Denomination FROM Church WHERE VillageName = '%s'"%self.villageName) 
+            mycursor.execute("SELECT ChurchName, Address, Denomination FROM Church WHERE VillageName = '%s'"%self.villageName)
             myresult = mycursor.fetchall()
 
             label1 = LabelFrame(master, text="Church Name")
@@ -543,10 +531,12 @@ class VillageWindow:
                     column = column + 1
             myresult.clear()
 
+    #function that displays information of the school whether it is public or private
+    #shows information on elementary, middle, and high schools
     def displaySchools(self, master, publicprivate ,gradeLevel):
         for x in self.labels:
             x.destroy()
-
+        #shows information about the public school
         if publicprivate == "PublicSchool":
             mycursor.execute("SELECT SchoolName, PhoneNumber, Mascot FROM %s join PublicSchool using(PublicID) WHERE VillageName = '%s' AND PrivateID IS NULL"%(gradeLevel,self.villageName))
             myresult = mycursor.fetchall()
@@ -579,7 +569,7 @@ class VillageWindow:
                     self.labels.append(data)
                     column = column + 1
             myresult.clear()
-
+        #shows information about private schools. Private schools have a denomination for religion and quarterly tuition
         if publicprivate == "PrivateSchool":
             mycursor.execute("SELECT SchoolName, PhoneNumber, Mascot, Denomination, Tuition FROM %s join PrivateSchool using(PrivateID) WHERE VillageName = '%s' "%(gradeLevel,self.villageName))
             myresult = mycursor.fetchall()
@@ -625,7 +615,8 @@ class VillageWindow:
                     column = column + 1
             myresult.clear()
 
-
+#main window that is parent of everything.
+#displays the population of Guam on the top
 class MainWindow:
     def __init__(self, master):
         self.titleLabel = Label(text="Guam Traveler's Database",height=3)
