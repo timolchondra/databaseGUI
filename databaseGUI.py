@@ -1,3 +1,7 @@
+#Timothy Olchondra
+#TCSS 445
+#Guam Traverl's Database GUI
+
 from tkinter import *
 import mysql.connector
 
