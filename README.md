@@ -1,8 +1,8 @@
 # Guam Traveler's Database GUI
-first GUI I've ever designed so it's pretty bad. But I try.
+GUI for user to look at data in the database. Very basic GUI.
 
 ## Getting Started
-You would need my SQL script for creating my database and inserting a bunch of data.
+Run the SQL script in MySQL to create the database and insert the data
 
 ## Prerequisites
 ```
